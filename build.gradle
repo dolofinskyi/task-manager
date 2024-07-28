@@ -40,3 +40,11 @@ java {
 		languageVersion = JavaLanguageVersion.of(21)
 	}
 }
+
+bootJar {
+	enabled = false
+}
+
+jar {
+	enabled = true
+}
