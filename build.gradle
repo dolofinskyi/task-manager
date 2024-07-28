@@ -33,12 +33,20 @@ subprojects {
 			extendsFrom annotationProcessor
 		}
 	}
+
+	test {
+		useJUnitPlatform()
+	}
 }
 
 java {
 	toolchain {
 		languageVersion = JavaLanguageVersion.of(21)
 	}
+}
+
+test {
+	useJUnitPlatform()
 }
 
 bootJar {
