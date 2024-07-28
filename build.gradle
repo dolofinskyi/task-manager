@@ -40,7 +40,3 @@ java {
 		languageVersion = JavaLanguageVersion.of(21)
 	}
 }
-
-springBoot {
-	mainClass.set('ua.dolofinskyi.Application')
-}
