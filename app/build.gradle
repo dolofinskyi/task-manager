@@ -21,5 +21,5 @@ test {
 }
 
 springBoot {
-    mainClass = 'ua.dolofinskyi.Application'
+    mainClass.set('ua.dolofinskyi.Application')
 }
