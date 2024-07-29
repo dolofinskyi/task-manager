@@ -1,4 +1,4 @@
-rootProject.name = 'todolist'
+rootProject.name = 'taskmanager'
 include 'app'
 include 'security'
 
