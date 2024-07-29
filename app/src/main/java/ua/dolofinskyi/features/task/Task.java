@@ -9,15 +9,12 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "task")
+@Getter
+@Setter
 public class Task {
     @Id
     @GeneratedValue
-    @Getter
     private long id;
-    @Getter
-    @Setter
     private String title;
-    @Getter
-    @Setter
     private String description;
 }
