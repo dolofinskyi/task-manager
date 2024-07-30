@@ -2,6 +2,5 @@ server:
   port: 3000
 
 spring:
-  config:
-    activate:
-      on-profile: h2
+  profiles:
+    active: dev
