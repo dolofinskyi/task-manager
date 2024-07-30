@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -20,6 +22,13 @@ class TaskServiceImplTest {
         initTask = new TaskDto();
         initTask.setTitle("Title");
         initTask.setDescription("Description");
+    }
+
+    @Test
+    void testGetTaskById() {
+        TaskDto createdTask = taskService.createTask(initTask);
+        TaskDto foundTask = taskService.getTaskById(createdTask.getId());
+        assertEquals(createdTask.getId(), foundTask.getId());
     }
 
     @Test
@@ -42,5 +51,17 @@ class TaskServiceImplTest {
     void testDeleteTask() {
         TaskDto createdTask = taskService.createTask(initTask);
         assertDoesNotThrow(() -> taskService.deleteTask(createdTask.getId()));
+    }
+
+    @Test
+    void testGetAllTasks() {
+        int length = 5;
+
+        for(int i = 0; i < length; i++) {
+            taskService.createTask(initTask);
+        }
+
+        List<TaskDto> allTasks = taskService.getAllTasks();
+        assertEquals(length, allTasks.size());
     }
 }
