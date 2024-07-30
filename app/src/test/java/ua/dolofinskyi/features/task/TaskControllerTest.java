@@ -1,0 +1,110 @@
+package ua.dolofinskyi.features.task;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+
+import org.mockito.MockitoAnnotations;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+
+@WebMvcTest(TaskController.class)
+class TaskControllerTest {
+    @Autowired
+    private MockMvc mockMvc;
+    @MockBean
+    private TaskServiceImpl taskService;
+    @Autowired
+    private ObjectMapper objectMapper;
+    private TaskDto initTask;
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+
+        initTask = new TaskDto();
+        initTask.setTitle("Title");
+        initTask.setDescription("Description");
+    }
+
+    @Test
+    public void getTaskById() throws Exception {
+        when(taskService.getTaskById(1L)).thenReturn(initTask);
+
+        mockMvc.perform(
+                get("/task/get?id=1").accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title").value(initTask.getTitle()))
+                .andExpect(jsonPath("$.description").value(initTask.getDescription()));
+
+        verify(taskService, times(1)).getTaskById(1L);
+    }
+
+    @Test
+    public void createTask() throws Exception {
+        when(taskService.createTask(any(TaskDto.class))).thenReturn(initTask);
+
+        mockMvc.perform(
+                    post("/task/create")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(initTask)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title").value(initTask.getTitle()))
+                .andExpect(jsonPath("$.description").value(initTask.getDescription()));
+
+        verify(taskService, times(1)).createTask(any(TaskDto.class));
+    }
+
+    @Test
+    public void updateTask() throws Exception {
+        when(taskService.updateTask(any(TaskDto.class))).thenReturn(initTask);
+
+        mockMvc.perform(
+                        put("/task/update")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(initTask)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(initTask.getId()))
+                .andExpect(jsonPath("$.title").value(initTask.getTitle()))
+                .andExpect(jsonPath("$.description").value(initTask.getDescription()));
+
+        verify(taskService, times(1)).updateTask(any(TaskDto.class));
+    }
+
+    @Test
+    public void deleteTask() throws Exception {
+        mockMvc.perform(delete("/task/delete?id=1"))
+                .andExpect(status().isOk());
+
+        verify(taskService, times(1)).deleteTask(1L);
+    }
+
+    @Test
+    public void getAllTasks() throws Exception {
+        List<TaskDto> listAllTasks = new ArrayList<>();
+        listAllTasks.add(initTask);
+
+        when(taskService.getAllTasks()).thenReturn(listAllTasks);
+
+        mockMvc.perform(
+                        get("/task/all").accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id").value(initTask.getId()))
+                .andExpect(jsonPath("$[0].title").value(initTask.getTitle()))
+                .andExpect(jsonPath("$[0].description").value(initTask.getDescription()));
+
+        verify(taskService, times(1)).getAllTasks();
+    }
+}
