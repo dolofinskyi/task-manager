@@ -7,8 +7,8 @@ spring:
       client:
         registration:
           google:
-            client-id: 539379928900-4pjbgga4o6tde251bcj31hsfb78atnls.apps.googleusercontent.com
-            client-secret: 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
+            client-id: your_id
+            client-secret: your_secret
             scopes:
               - openid
               - profile
