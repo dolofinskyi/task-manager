@@ -1,7 +1,7 @@
 package ua.dolofinskyi.features.task;
 
 import org.springframework.stereotype.Component;
-import ua.dolofinskyi.features.mapper.Mapper;
+import ua.dolofinskyi.common.mapper.Mapper;
 
 @Component
 public class TaskMapper implements Mapper<Task, TaskDto> {

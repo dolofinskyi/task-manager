@@ -1,4 +1,4 @@
-package ua.dolofinskyi.features.mapper;
+package ua.dolofinskyi.common.mapper;
 
 public interface Mapper<Entity, Dto> {
     Entity toEntity(Dto dto);

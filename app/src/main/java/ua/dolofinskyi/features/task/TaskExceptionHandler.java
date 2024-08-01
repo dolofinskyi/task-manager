@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ua.dolofinskyi.features.response.Response;
+import ua.dolofinskyi.common.response.Response;
 import ua.dolofinskyi.features.task.exception.TaskMissingIdException;
 import ua.dolofinskyi.features.task.exception.TaskNotFoundException;
 

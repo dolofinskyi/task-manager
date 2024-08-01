@@ -2,5 +2,16 @@ server:
   port: 3000
 
 spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 539379928900-4pjbgga4o6tde251bcj31hsfb78atnls.apps.googleusercontent.com
+            client-secret: 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
+            scopes:
+              - openid
+              - profile
+              - email
   profiles:
     active: dev
