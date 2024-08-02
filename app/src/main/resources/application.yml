@@ -2,16 +2,5 @@ server:
   port: 3000
 
 spring:
-  security:
-    oauth2:
-      client:
-        registration:
-          google:
-#            client-id: your_id
-#            client-secret: your_secret
-            scopes:
-              - openid
-              - profile
-              - email
   profiles:
     active: dev
