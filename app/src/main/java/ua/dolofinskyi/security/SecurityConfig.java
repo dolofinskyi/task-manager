@@ -17,8 +17,8 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/task/**").permitAll()
-                        .anyRequest().permitAll()
+                        .requestMatchers("/").permitAll()
+                        .anyRequest().authenticated()
                 )
                 .oauth2Login(Customizer.withDefaults());
         return http.build();

@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -51,6 +52,7 @@ class TaskControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "user")
     public void getTaskById() throws Exception {
         when(taskService.getTaskById(1L)).thenReturn(initTask);
 
@@ -64,6 +66,7 @@ class TaskControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "user")
     public void createTask() throws Exception {
         when(taskService.createTask(any(TaskDto.class))).thenReturn(initTask);
 
@@ -79,6 +82,7 @@ class TaskControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "user")
     public void updateTask() throws Exception {
         when(taskService.updateTask(any(TaskDto.class))).thenReturn(initTask);
 
@@ -95,6 +99,7 @@ class TaskControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "user")
     public void deleteTask() throws Exception {
         mockMvc.perform(delete("/api/task/delete?id=1"))
                 .andExpect(status().isOk());
@@ -103,6 +108,7 @@ class TaskControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "user")
     public void getAllTasks() throws Exception {
         List<TaskDto> listAllTasks = new ArrayList<>();
         listAllTasks.add(initTask);
