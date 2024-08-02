@@ -8,9 +8,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+
+import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
 import org.mockito.MockitoAnnotations;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
+import ua.dolofinskyi.security.SecurityConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,9 +27,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @WebMvcTest(TaskController.class)
+@ContextConfiguration(classes = {TaskController.class, SecurityConfig.class})
 class TaskControllerTest {
-    @Autowired
     private MockMvc mockMvc;
+    @Autowired
+    private WebApplicationContext webApplicationContext;
     @MockBean
     private TaskServiceImpl taskService;
     @Autowired
@@ -33,6 +41,10 @@ class TaskControllerTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
+
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
+                .apply(SecurityMockMvcConfigurers.springSecurity())
+                .build();
 
         initTask = new TaskDto();
         initTask.setTitle("Title");
@@ -44,7 +56,7 @@ class TaskControllerTest {
         when(taskService.getTaskById(1L)).thenReturn(initTask);
 
         mockMvc.perform(
-                get("/task/get?id=1").accept(MediaType.APPLICATION_JSON))
+                get("/api/task/get?id=1").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").value(initTask.getTitle()))
                 .andExpect(jsonPath("$.description").value(initTask.getDescription()));
@@ -57,7 +69,7 @@ class TaskControllerTest {
         when(taskService.createTask(any(TaskDto.class))).thenReturn(initTask);
 
         mockMvc.perform(
-                    post("/task/create")
+                    post("/api/task/create")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(initTask)))
                 .andExpect(status().isOk())
@@ -72,7 +84,7 @@ class TaskControllerTest {
         when(taskService.updateTask(any(TaskDto.class))).thenReturn(initTask);
 
         mockMvc.perform(
-                        put("/task/update")
+                        put("/api/task/update")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(initTask)))
                 .andExpect(status().isOk())
@@ -85,7 +97,7 @@ class TaskControllerTest {
 
     @Test
     public void deleteTask() throws Exception {
-        mockMvc.perform(delete("/task/delete?id=1"))
+        mockMvc.perform(delete("/api/task/delete?id=1"))
                 .andExpect(status().isOk());
 
         verify(taskService, times(1)).deleteTask(1L);
@@ -99,7 +111,7 @@ class TaskControllerTest {
         when(taskService.getAllTasks()).thenReturn(listAllTasks);
 
         mockMvc.perform(
-                        get("/task/all").accept(MediaType.APPLICATION_JSON))
+                        get("/api/task/all").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(initTask.getId()))
                 .andExpect(jsonPath("$[0].title").value(initTask.getTitle()))
