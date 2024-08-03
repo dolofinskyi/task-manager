@@ -2,12 +2,11 @@ package ua.dolofinskyi.features.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
-import ua.dolofinskyi.features.user.exception.UserNotFoundException;
 import ua.dolofinskyi.security.oauth2.CustomOAuth2User;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Spliterator;
 import java.util.stream.StreamSupport;
 
@@ -19,25 +18,16 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Override
-    public UserDto getUserById(Long id) {
-        User user = userRepository
-                .findById(id)
-                .orElseThrow(UserNotFoundException::new);
-        return userMapper.toDto(user);
+    public User getUserOAuth2Sub(String oauth2Sub) {
+        return userRepository.findByOauth2Sub(oauth2Sub);
     }
 
     @Override
-    public UserDto getUserOAuth2Sub(String oauth2Sub) {
-        User user = userRepository.findByOauth2Sub(oauth2Sub);
-        return userMapper.toDto(user);
-    }
-
-    @Override
-    public User createUser(OAuth2User oAuth2User) {
+    public User createUser(Map<String, Object> attributes) {
         User user = new User();
-        user.setUsername(oAuth2User.getAttribute("name"));
-        user.setEmail(oAuth2User.getAttribute("email"));
-        user.setOauth2Sub(oAuth2User.getAttribute("sub"));
+        user.setUsername((String) attributes.get("name"));
+        user.setEmail((String) attributes.get("email"));
+        user.setOauth2Sub((String) attributes.get("sub"));
         return userRepository.save(user);
     }
 
@@ -59,7 +49,7 @@ public class UserServiceImpl implements UserService {
                 .getAuthentication()
                 .getPrincipal();
         User user = oAuth2User.getUser();
-        userRepository.deleteById(user.getId());
+        userRepository.delete(user);
     }
 
     @Override
