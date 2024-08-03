@@ -11,7 +11,7 @@ import java.util.Map;
 
 @Getter
 @RequiredArgsConstructor
-public class CustomOauth2User implements OAuth2User {
+public class CustomOAuth2User implements OAuth2User {
     private final User user;
     private final Map<String, Object> attributes;
     private final Collection<? extends GrantedAuthority> authorities;
