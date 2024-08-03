@@ -3,6 +3,7 @@ package ua.dolofinskyi.features.task;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import ua.dolofinskyi.features.user.User;
 
 @Entity
 @Table(name = "task")
@@ -14,4 +15,7 @@ public class Task {
     private Long id;
     private String title;
     private String description;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }
