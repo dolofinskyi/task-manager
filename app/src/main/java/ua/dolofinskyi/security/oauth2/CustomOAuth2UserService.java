@@ -1,46 +1,45 @@
 package ua.dolofinskyi.security.oauth2;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
+import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
+
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
-import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 import ua.dolofinskyi.features.user.User;
 import ua.dolofinskyi.features.user.UserServiceImpl;
 
-import java.util.Collections;
-import java.util.Map;
+import java.util.Collection;
+import java.util.List;
+
 
 @Service
-public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
+public class CustomOAuth2UserService extends OidcUserService {
     @Autowired
     private UserServiceImpl userService;
 
     @Override
-    public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-        String accessToken = userRequest.getAccessToken().getTokenValue();
-        String userInfoEndpointUri = userRequest.getClientRegistration()
-                .getProviderDetails()
-                .getUserInfoEndpoint()
-                .getUri();
-
-        Map<String, Object> userAttributes = getUserInfoFromGoogle(userInfoEndpointUri, accessToken);
-        String oauth2Sub = (String) userAttributes.get("sub");
-
-        User user = userService.getUserOAuth2Sub(oauth2Sub);
+    public OidcUser loadUser(OidcUserRequest userRequest) throws OAuth2AuthenticationException {
+        OidcUser oidcUser = super.loadUser(userRequest);
+        String sub = oidcUser.getAttribute("sub");
+        User user = userService.getUserByOAuth2Sub(sub);
 
         if (user == null) {
-            user = userService.createUser(userAttributes);
+            user = userService.createUser(oidcUser);
         }
 
-        return new CustomOAuth2User(user, userAttributes, Collections.emptyList());
-    }
+        List<User.Role> roles = List.of(
+                User.Role.ROLE_USER
+        );
 
-    private Map<String, Object> getUserInfoFromGoogle(String userInfoEndpointUri, String accessToken) {
-        String uri = userInfoEndpointUri + "?access_token=" + accessToken;
-        RestTemplate restTemplate = new RestTemplate();
-        return restTemplate.getForObject(uri, Map.class);
+        user.setRoles(roles);
+
+        Collection<? extends GrantedAuthority> authorities = roles.stream()
+                .map(role -> new SimpleGrantedAuthority(role.name())).toList();
+
+        return new CustomOAuth2User(user, authorities, oidcUser);
     }
 }

@@ -2,11 +2,11 @@ package ua.dolofinskyi.features.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import ua.dolofinskyi.security.oauth2.CustomOAuth2User;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Spliterator;
 import java.util.stream.StreamSupport;
 
@@ -18,16 +18,16 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Override
-    public User getUserOAuth2Sub(String oauth2Sub) {
+    public User getUserByOAuth2Sub(String oauth2Sub) {
         return userRepository.findByOauth2Sub(oauth2Sub);
     }
 
     @Override
-    public User createUser(Map<String, Object> attributes) {
+    public User createUser(OAuth2User oAuth2User) {
         User user = new User();
-        user.setUsername((String) attributes.get("name"));
-        user.setEmail((String) attributes.get("email"));
-        user.setOauth2Sub((String) attributes.get("sub"));
+        user.setUsername(oAuth2User.getAttribute("name"));
+        user.setEmail(oAuth2User.getAttribute("email"));
+        user.setOauth2Sub(oAuth2User.getAttribute("sub"));
         return userRepository.save(user);
     }
 
