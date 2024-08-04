@@ -33,10 +33,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserFromSecurityContextHolder() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null) {
+        if (authentication == null ||
+                !(authentication.getPrincipal() instanceof CustomOAuth2User oAuth2User)) {
             throw new UserNotAuthenticatedException();
         }
-        CustomOAuth2User oAuth2User = (CustomOAuth2User) authentication.getPrincipal();
         User user = oAuth2User.getUser();
         if (user == null) {
             throw new UserNotFoundException();
