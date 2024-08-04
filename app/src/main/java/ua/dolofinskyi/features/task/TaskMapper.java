@@ -10,7 +10,6 @@ public class TaskMapper implements Mapper<Task, TaskDto> {
         Task task = new Task();
         task.setId(taskDto.getId());
         task.setTitle(taskDto.getTitle());
-        task.setTitle(taskDto.getTitle());
         task.setDescription(taskDto.getDescription());
         return task;
     }
