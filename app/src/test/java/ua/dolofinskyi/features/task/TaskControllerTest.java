@@ -109,11 +109,11 @@ class TaskControllerTest {
 
     @Test
     @WithMockUser(username = "user")
-    public void getAllTasks() throws Exception {
+    public void getAllUserTasks() throws Exception {
         List<TaskDto> listAllTasks = new ArrayList<>();
         listAllTasks.add(initTask);
 
-        when(taskService.getAllTasks()).thenReturn(listAllTasks);
+        when(taskService.getAllUserTasks()).thenReturn(listAllTasks);
 
         mockMvc.perform(
                         get("/api/task/all").accept(MediaType.APPLICATION_JSON))
@@ -122,6 +122,6 @@ class TaskControllerTest {
                 .andExpect(jsonPath("$[0].title").value(initTask.getTitle()))
                 .andExpect(jsonPath("$[0].description").value(initTask.getDescription()));
 
-        verify(taskService, times(1)).getAllTasks();
+        verify(taskService, times(1)).getAllUserTasks();
     }
 }

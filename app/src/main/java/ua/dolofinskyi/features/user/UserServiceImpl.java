@@ -89,12 +89,4 @@ public class UserServiceImpl implements UserService {
         User user = getUserFromSecurityContextHolder();
         userRepository.delete(user);
     }
-
-    @Override
-    public List<UserDto> getAllUsers() {
-        Spliterator<User> userSpliterator = userRepository.findAll().spliterator();
-        return StreamSupport.stream(userSpliterator, false)
-                .map(user -> userMapper.toDto(user))
-                .toList();
-    }
 }

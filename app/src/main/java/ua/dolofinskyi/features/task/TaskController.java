@@ -32,7 +32,7 @@ public class TaskController {
     }
 
     @GetMapping("/all")
-    public List<TaskDto> getAllTasks() {
-        return taskService.getAllTasks();
+    public List<TaskDto> getAllUserTasks() {
+        return taskService.getAllUserTasks();
     }
 }

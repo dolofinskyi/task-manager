@@ -9,10 +9,7 @@ import ua.dolofinskyi.features.user.User;
 import ua.dolofinskyi.features.user.UserRepository;
 import ua.dolofinskyi.features.user.UserServiceImpl;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Spliterator;
-import java.util.stream.StreamSupport;
 
 @Service
 public class TaskServiceImpl implements TaskService {
@@ -88,14 +85,6 @@ public class TaskServiceImpl implements TaskService {
     public List<TaskDto> getAllUserTasks() {
         User user = userService.getUserFromSecurityContextHolder();
         return user.getTasks().stream()
-                .map(task -> taskMapper.toDto(task))
-                .toList();
-    }
-
-    @Override
-    public List<TaskDto> getAllTasks() {
-        Spliterator<Task> taskSpliterator = taskRepository.findAll().spliterator();
-        return StreamSupport.stream(taskSpliterator, false)
                 .map(task -> taskMapper.toDto(task))
                 .toList();
     }
