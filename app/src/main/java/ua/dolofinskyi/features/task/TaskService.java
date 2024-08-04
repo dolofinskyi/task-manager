@@ -8,5 +8,4 @@ public interface TaskService {
     TaskDto updateTask(TaskDto taskDto);
     void deleteTask(Long id);
     List<TaskDto> getAllUserTasks();
-    List<TaskDto> getAllTasks();
 }
