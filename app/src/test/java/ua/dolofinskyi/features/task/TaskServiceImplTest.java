@@ -14,10 +14,8 @@ import ua.dolofinskyi.features.user.User;
 import ua.dolofinskyi.features.user.UserServiceImpl;
 import ua.dolofinskyi.security.oauth2.CustomOAuth2User;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Collections;
 
 public class TaskServiceImplTest {
 
@@ -79,6 +77,7 @@ public class TaskServiceImplTest {
 
         assertNotNull(result);
         assertEquals(taskDto.getTitle(), result.getTitle());
+        assertEquals(taskDto.getDescription(), result.getDescription());
         verify(taskRepository, times(1)).save(task);
     }
 

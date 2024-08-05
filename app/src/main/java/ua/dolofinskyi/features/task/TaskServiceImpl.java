@@ -43,6 +43,7 @@ public class TaskServiceImpl implements TaskService {
         }
         User user = userService.getUserFromSecurityContextHolder();
         Task task = taskMapper.toEntity(taskDto);
+        task.setUser(user);
         Task savedTask = taskRepository.save(task);
         user.getTasks().add(savedTask);
         return taskMapper.toDto(savedTask);
