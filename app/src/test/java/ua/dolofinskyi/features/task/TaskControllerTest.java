@@ -49,6 +49,7 @@ class TaskControllerTest {
         initTask = new TaskDto();
         initTask.setTitle("Title");
         initTask.setDescription("Description");
+        initTask.setIsDone(false);
     }
 
     @Test
@@ -60,7 +61,8 @@ class TaskControllerTest {
                 get("/api/task/get?id=1").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").value(initTask.getTitle()))
-                .andExpect(jsonPath("$.description").value(initTask.getDescription()));
+                .andExpect(jsonPath("$.description").value(initTask.getDescription()))
+                .andExpect(jsonPath("$.isDone").value(initTask.getIsDone()));
 
         verify(taskService, times(1)).getTaskById(1L);
     }
@@ -76,7 +78,8 @@ class TaskControllerTest {
                             .content(objectMapper.writeValueAsString(initTask)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").value(initTask.getTitle()))
-                .andExpect(jsonPath("$.description").value(initTask.getDescription()));
+                .andExpect(jsonPath("$.description").value(initTask.getDescription()))
+                .andExpect(jsonPath("$.isDone").value(initTask.getIsDone()));
 
         verify(taskService, times(1)).createTask(any(TaskDto.class));
     }
@@ -93,7 +96,8 @@ class TaskControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(initTask.getId()))
                 .andExpect(jsonPath("$.title").value(initTask.getTitle()))
-                .andExpect(jsonPath("$.description").value(initTask.getDescription()));
+                .andExpect(jsonPath("$.description").value(initTask.getDescription()))
+                .andExpect(jsonPath("$.isDone").value(initTask.getIsDone()));
 
         verify(taskService, times(1)).updateTask(any(TaskDto.class));
     }
@@ -120,7 +124,8 @@ class TaskControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(initTask.getId()))
                 .andExpect(jsonPath("$[0].title").value(initTask.getTitle()))
-                .andExpect(jsonPath("$[0].description").value(initTask.getDescription()));
+                .andExpect(jsonPath("$[0].description").value(initTask.getDescription()))
+                .andExpect(jsonPath("$[0].isDone").value(initTask.getIsDone()));
 
         verify(taskService, times(1)).getAllUserTasks();
     }
