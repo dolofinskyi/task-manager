@@ -87,6 +87,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser() {
         User user = getUserFromSecurityContextHolder();
+        if (user == null) {
+            throw new UserNotFoundException();
+        }
         userRepository.delete(user);
     }
 }
