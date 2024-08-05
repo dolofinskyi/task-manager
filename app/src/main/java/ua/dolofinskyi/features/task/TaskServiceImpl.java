@@ -38,7 +38,8 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public TaskDto createTask(TaskDto taskDto) {
         if (taskDto == null ||
-                taskDto.getTitle() == null) {
+                taskDto.getTitle() == null ||
+                taskDto.getIsDone() == null) {
             throw new TaskMissingDataException();
         }
         User user = userService.getUserFromSecurityContextHolder();
@@ -53,7 +54,8 @@ public class TaskServiceImpl implements TaskService {
     public TaskDto updateTask(TaskDto taskDto) {
         if(taskDto == null ||
                 taskDto.getId() == null ||
-                taskDto.getTitle() == null){
+                taskDto.getTitle() == null ||
+                taskDto.getIsDone() == null){
             throw new TaskMissingDataException();
         }
         User user = userService.getUserFromSecurityContextHolder();

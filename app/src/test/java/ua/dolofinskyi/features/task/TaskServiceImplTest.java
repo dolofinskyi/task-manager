@@ -30,103 +30,102 @@ public class TaskServiceImplTest {
 
     @InjectMocks
     private TaskServiceImpl taskService;
+    private Task initTask;
+    private User initUser;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        User user = new User();
+        initUser = new User();
         CustomOAuth2User customOAuth2User = mock(CustomOAuth2User.class);
-        when(customOAuth2User.getUser()).thenReturn(user);
+        when(customOAuth2User.getUser()).thenReturn(initUser);
 
         Authentication authentication = mock(Authentication.class);
         when(authentication.getPrincipal()).thenReturn(customOAuth2User);
         SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        initTask = new Task();
+        initTask.setId(1L);
+        initTask.setTitle("Title");
+        initTask.setDescription("Description");
+        initTask.setIsDone(false);
+        initUser.getTasks().add(initTask);
     }
 
     @Test
     void getTaskById() {
-        Task task = new Task();
-        task.setId(1L);
-        User user = new User();
-        user.getTasks().add(task);
+        TaskDto initTaskDto = new TaskDto();
+        initTaskDto.setId(1L);
+        initTaskDto.setTitle("Title");
+        initTaskDto.setDescription("Description");
+        initTaskDto.setIsDone(false);
 
-        when(userService.getUserFromSecurityContextHolder()).thenReturn(user);
-        when(taskRepository.findById(1L)).thenReturn(Optional.of(task));
-        when(taskMapper.toDto(task)).thenReturn(new TaskDto());
+        when(userService.getUserFromSecurityContextHolder()).thenReturn(initUser);
+        when(taskRepository.findById(1L)).thenReturn(Optional.of(initTask));
+        when(taskMapper.toDto(initTask)).thenReturn(initTaskDto);
 
-        TaskDto result = taskService.getTaskById(1L);
+        TaskDto actual = taskService.getTaskById(1L);
 
-        assertNotNull(result);
-        verify(taskRepository, times(1)).findById(1L);
+        assertNotNull(actual);
+        assertEquals(initTaskDto, actual);
     }
 
     @Test
     void createTask() {
-        TaskDto taskDto = new TaskDto();
-        taskDto.setTitle("Test Task");
-        User user = new User();
+        TaskDto initTaskDto = new TaskDto();
+        initTaskDto.setId(1L);
+        initTaskDto.setTitle("Title");
+        initTaskDto.setDescription("Description");
+        initTaskDto.setIsDone(false);
 
-        Task task = new Task();
-        when(userService.getUserFromSecurityContextHolder()).thenReturn(user);
-        when(taskMapper.toEntity(taskDto)).thenReturn(task);
-        when(taskRepository.save(task)).thenReturn(task);
-        when(taskMapper.toDto(task)).thenReturn(taskDto);
+        when(userService.getUserFromSecurityContextHolder()).thenReturn(initUser);
+        when(taskMapper.toEntity(initTaskDto)).thenReturn(initTask);
+        when(taskRepository.save(initTask)).thenReturn(initTask);
+        when(taskMapper.toDto(initTask)).thenReturn(initTaskDto);
 
-        TaskDto result = taskService.createTask(taskDto);
+        TaskDto actual = taskService.createTask(initTaskDto);
 
-        assertNotNull(result);
-        assertEquals(taskDto.getTitle(), result.getTitle());
-        assertEquals(taskDto.getDescription(), result.getDescription());
-        verify(taskRepository, times(1)).save(task);
+        assertNotNull(actual);
+        assertEquals(initTaskDto.getTitle(), actual.getTitle());
+        assertEquals(initTaskDto.getDescription(), actual.getDescription());
+        assertEquals(initTaskDto.getIsDone(), actual.getIsDone());
     }
 
     @Test
     void updateTask() {
-        TaskDto taskDto = new TaskDto();
-        taskDto.setId(1L);
-        taskDto.setTitle("Updated Task");
+        TaskDto initTaskDto = new TaskDto();
+        initTaskDto.setId(1L);
+        initTaskDto.setTitle("Update Title");
+        initTaskDto.setDescription("Update Description");
+        initTaskDto.setIsDone(true);
 
-        Task task = new Task();
-        task.setId(1L);
-        User user = new User();
-        user.getTasks().add(task);
+        when(userService.getUserFromSecurityContextHolder()).thenReturn(initUser);
+        when(taskRepository.findById(1L)).thenReturn(Optional.of(initTask));
+        when(taskRepository.save(initTask)).thenReturn(initTask);
+        when(taskMapper.toDto(initTask)).thenReturn(initTaskDto);
 
-        when(userService.getUserFromSecurityContextHolder()).thenReturn(user);
-        when(taskRepository.findById(1L)).thenReturn(Optional.of(task));
-        when(taskRepository.save(task)).thenReturn(task);
-        when(taskMapper.toDto(task)).thenReturn(taskDto);
+        TaskDto actual = taskService.updateTask(initTaskDto);
 
-        TaskDto result = taskService.updateTask(taskDto);
-
-        assertNotNull(result);
-        assertEquals(taskDto.getTitle(), result.getTitle());
-        verify(taskRepository, times(1)).save(task);
+        assertNotNull(actual);
+        assertEquals(initTaskDto.getId(), actual.getId());
+        assertEquals(initTaskDto.getTitle(), actual.getTitle());
+        assertEquals(initTaskDto.getDescription(), actual.getDescription());
+        assertEquals(initTaskDto.getIsDone(), actual.getIsDone());
     }
 
     @Test
     void deleteTask() {
-        Task task = new Task();
-        task.setId(1L);
-        User user = new User();
-        user.getTasks().add(task);
-
-        when(userService.getUserFromSecurityContextHolder()).thenReturn(user);
-        when(taskRepository.findById(1L)).thenReturn(Optional.of(task));
-
+        when(userService.getUserFromSecurityContextHolder()).thenReturn(initUser);
+        when(taskRepository.findById(1L)).thenReturn(Optional.of(initTask));
         taskService.deleteTask(1L);
-
-        verify(taskRepository, times(1)).delete(task);
+        verify(taskRepository, times(1)).delete(initTask);
     }
 
     @Test
     void testGetAllUserTasks() {
-        User user = new User();
-        Task task = new Task();
-        user.getTasks().add(task);
-
-        when(userService.getUserFromSecurityContextHolder()).thenReturn(user);
-        when(taskMapper.toDto(task)).thenReturn(new TaskDto());
+        when(userService.getUserFromSecurityContextHolder()).thenReturn(initUser);
+        when(taskMapper.toDto(any(Task.class))).thenReturn(new TaskDto());
 
         List<TaskDto> result = taskService.getAllUserTasks();
 
