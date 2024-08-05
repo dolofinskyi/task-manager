@@ -47,7 +47,7 @@ public class TaskServiceImplTest {
     }
 
     @Test
-    void testGetTaskById() {
+    void getTaskById() {
         Task task = new Task();
         task.setId(1L);
         User user = new User();
@@ -64,7 +64,7 @@ public class TaskServiceImplTest {
     }
 
     @Test
-    void testCreateTask() {
+    void createTask() {
         TaskDto taskDto = new TaskDto();
         taskDto.setTitle("Test Task");
         User user = new User();
@@ -83,7 +83,7 @@ public class TaskServiceImplTest {
     }
 
     @Test
-    void testUpdateTask() {
+    void updateTask() {
         TaskDto taskDto = new TaskDto();
         taskDto.setId(1L);
         taskDto.setTitle("Updated Task");
@@ -106,7 +106,7 @@ public class TaskServiceImplTest {
     }
 
     @Test
-    void testDeleteTask() {
+    void deleteTask() {
         Task task = new Task();
         task.setId(1L);
         User user = new User();
