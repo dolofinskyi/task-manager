@@ -2,7 +2,7 @@ package ua.dolofinskyi.features.user;
 
 import lombok.Getter;
 import lombok.Setter;
-import ua.dolofinskyi.features.task.Task;
+import ua.dolofinskyi.features.task.TaskDto;
 
 import java.util.List;
 @Getter
@@ -10,5 +10,5 @@ import java.util.List;
 public class UserDto {
     private String username;
     private String email;
-    private List<Task> tasks;
+    private List<TaskDto> tasks;
 }

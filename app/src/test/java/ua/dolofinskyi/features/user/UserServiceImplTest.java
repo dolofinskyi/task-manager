@@ -81,7 +81,7 @@ class UserServiceImplTest {
         UserDto userDto = new UserDto();
         userDto.setUsername("update username");
         userDto.setEmail("update email");
-        userDto.setTasks(List.of(new Task()));
+        userDto.setTasks(List.of());
 
         when(userService.getUserFromSecurityContextHolder()).thenReturn(initUser);
         when(userMapper.toDto(any(User.class))).thenReturn(userDto);
