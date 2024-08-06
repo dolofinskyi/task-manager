@@ -31,20 +31,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserFromSecurityContextHolder() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null ||
-                !(authentication.getPrincipal() instanceof CustomOAuth2User oAuth2User)) {
-            throw new UserNotAuthenticatedException();
-        }
-        User user = oAuth2User.getUser();
-        if (user == null) {
-            throw new UserNotFoundException();
-        }
-        return user;
-    }
-
-    @Override
     public User createUser(OAuth2User oAuth2User) {
         if (oAuth2User == null) {
             throw new UserNotFoundException();
@@ -91,5 +77,25 @@ public class UserServiceImpl implements UserService {
             throw new UserNotFoundException();
         }
         userRepository.delete(user);
+    }
+
+    @Override
+    public UserDto getUserDtoFromSecurityContextHolder() {
+        User user = getUserFromSecurityContextHolder();
+        return userMapper.toDto(user);
+    }
+
+    @Override
+    public User getUserFromSecurityContextHolder() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null ||
+                !(authentication.getPrincipal() instanceof CustomOAuth2User oAuth2User)) {
+            throw new UserNotAuthenticatedException();
+        }
+        User user = oAuth2User.getUser();
+        if (user == null) {
+            throw new UserNotFoundException();
+        }
+        return user;
     }
 }

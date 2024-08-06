@@ -55,6 +55,19 @@ class UserServiceImplTest {
     }
 
     @Test
+    void getUserDtoFromSecurityContextHolder() {
+        UserDto initUserDto = new UserDto();
+        initUserDto.setUsername("username");
+        initUserDto.setEmail("email");
+
+        when(userService.getUserFromSecurityContextHolder()).thenReturn(initUser);
+        when(userMapper.toDto(any(User.class))).thenReturn(initUserDto);
+
+        UserDto actual = userService.getUserDtoFromSecurityContextHolder();
+        assertEquals(initUserDto, actual);
+    }
+
+    @Test
     void getUserFromSecurityContextHolder() {
         User actual = userService.getUserFromSecurityContextHolder();
         assertEquals(initUser, actual);
