@@ -6,8 +6,22 @@
     <link th:href="@{/css/app/main.css}" rel="stylesheet">
 </head>
 <body>
-    <header>
 
-    </header>
+    <div class="user-data">
+        <div class="username-container">
+            <p>username: </p>
+            <input type="text" name="username" id="username" th:value="${user.username}">
+        </div>
+        <div class="email-container">
+            <p>email: </p>
+            <input type="text" name="email" id="email" th:value="${user.email}">
+        </div>
+    </div>
+
+    <div class="task-list">
+        <div class="task" th:each="task : ${user.tasks}">
+            <div th:replace="~{fragments/task/taskFragment(task=${task})}"></div>
+        </div>
+    </div>
 </body>
 </html>
