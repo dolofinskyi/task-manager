@@ -125,7 +125,7 @@ public class TaskServiceImplTest {
     @Test
     void testGetAllUserTasks() {
         when(userService.getUserFromSecurityContextHolder()).thenReturn(initUser);
-        when(taskMapper.toDto(any(Task.class))).thenReturn(new TaskDto());
+        when(taskMapper.entitiesToDtos(anyList())).thenReturn(List.of(new TaskDto()));
 
         List<TaskDto> result = taskService.getAllUserTasks();
 

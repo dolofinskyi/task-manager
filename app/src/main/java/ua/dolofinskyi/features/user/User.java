@@ -11,30 +11,24 @@ import ua.dolofinskyi.features.task.Task;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
+@Getter
 @Entity
 @Table(name = "app_user")
 @ToString
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Getter
     private Long id;
-    @Getter
     @Setter
     private String username;
-    @Getter
     @Setter
     private String email;
-    @Getter
     @Setter
     private String oauth2Sub;
-    @Getter
     @Setter
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Task> tasks = new ArrayList<>();
-    @Getter
     @Setter
     @ElementCollection
     @Enumerated(EnumType.STRING)
@@ -43,7 +37,7 @@ public class User {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles.stream()
                 .map(role -> new SimpleGrantedAuthority(role.name()))
-                .collect(Collectors.toSet());
+                .toList();
     }
 
     public enum Role {

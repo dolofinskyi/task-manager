@@ -36,10 +36,6 @@ public class CustomOAuth2UserService extends OidcUserService {
         );
 
         user.setRoles(roles);
-
-        Collection<? extends GrantedAuthority> authorities = roles.stream()
-                .map(role -> new SimpleGrantedAuthority(role.name())).toList();
-
-        return new CustomOAuth2User(user, authorities, oidcUser);
+        return new CustomOAuth2User(user, user.getAuthorities(), oidcUser);
     }
 }

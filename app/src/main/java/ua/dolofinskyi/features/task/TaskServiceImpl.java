@@ -87,8 +87,6 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public List<TaskDto> getAllUserTasks() {
         User user = userService.getUserFromSecurityContextHolder();
-        return user.getTasks().stream()
-                .map(task -> taskMapper.toDto(task))
-                .toList();
+        return taskMapper.entitiesToDtos(user.getTasks());
     }
 }
