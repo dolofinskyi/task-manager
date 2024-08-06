@@ -20,11 +20,14 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/", "/login").permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2
+                        .loginPage("/login")
                         .userInfoEndpoint(endpoint -> endpoint.oidcUserService(customOAuth2UserService()))
-                        .successHandler((request, response, authentication) -> response.sendRedirect("/"))
+                        .defaultSuccessUrl("/app")
+                        .permitAll()
                 );
         return http.build();
     }
