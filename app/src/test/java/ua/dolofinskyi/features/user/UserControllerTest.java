@@ -19,8 +19,6 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import java.util.ArrayList;
-
 @SpringBootTest
 @AutoConfigureMockMvc
 class UserControllerTest {
@@ -44,7 +42,6 @@ class UserControllerTest {
         initUserDto = new UserDto();
         initUserDto.setUsername("username");
         initUserDto.setEmail("email");
-        initUserDto.setTasks(new ArrayList<>());
     }
     @Test
     @WithMockUser
@@ -57,8 +54,7 @@ class UserControllerTest {
                                 .content(objectMapper.writeValueAsString(initUserDto)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.username").value(initUserDto.getUsername()))
-                .andExpect(jsonPath("$.email").value(initUserDto.getEmail()))
-                .andExpect(jsonPath("$.tasks").value(initUserDto.getTasks()));
+                .andExpect(jsonPath("$.email").value(initUserDto.getEmail()));
     }
 
     @Test

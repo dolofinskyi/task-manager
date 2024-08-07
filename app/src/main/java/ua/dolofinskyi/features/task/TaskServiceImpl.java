@@ -2,7 +2,6 @@ package ua.dolofinskyi.features.task;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ua.dolofinskyi.features.task.exception.TaskAccessDeniedException;
 import ua.dolofinskyi.features.task.exception.TaskMissingDataException;
 import ua.dolofinskyi.features.task.exception.TaskNotFoundException;
 import ua.dolofinskyi.features.user.User;
@@ -27,12 +26,16 @@ public class TaskServiceImpl implements TaskService {
         if(id == null) {
             throw new TaskMissingDataException();
         }
+
         User user = userService.getUserFromSecurityContextHolder();
-        Task task = taskRepository.findById(id).orElseThrow(TaskNotFoundException::new);
-        if (!user.getTasks().contains(task)) {
-            throw new TaskAccessDeniedException();
+
+        for (Task task: user.getTasks()) {
+            if (task.getId().equals(id)) {
+                return taskMapper.toDto(task);
+            }
         }
-        return taskMapper.toDto(task);
+
+        throw new TaskNotFoundException();
     }
 
     @Override
@@ -59,15 +62,18 @@ public class TaskServiceImpl implements TaskService {
             throw new TaskMissingDataException();
         }
         User user = userService.getUserFromSecurityContextHolder();
-        Task targetTask = taskRepository.findById(taskDto.getId())
-                .orElseThrow(TaskNotFoundException::new);
-        if (!user.getTasks().contains(targetTask)) {
-            throw new TaskAccessDeniedException();
+
+        for (Task task: user.getTasks()) {
+            if (task.getId().equals(taskDto.getId())) {
+                task.setTitle(taskDto.getTitle());
+                task.setDescription(taskDto.getDescription());
+                task.setIsDone(taskDto.getIsDone());
+                Task updatedTask = taskRepository.save(task);
+                return taskMapper.toDto(updatedTask);
+            }
         }
-        targetTask.setTitle(taskDto.getTitle());
-        targetTask.setDescription(taskDto.getDescription());
-        Task updatedTask = taskRepository.save(targetTask);
-        return taskMapper.toDto(updatedTask);
+
+        throw new TaskNotFoundException();
     }
 
     @Override
@@ -75,18 +81,24 @@ public class TaskServiceImpl implements TaskService {
         if(id == null){
             throw new TaskMissingDataException();
         }
+
         User user = userService.getUserFromSecurityContextHolder();
-        Task task = taskRepository.findById(id)
-                .orElseThrow(TaskNotFoundException::new);
-        if (!user.getTasks().contains(task)) {
-            throw new TaskAccessDeniedException();
+
+        for (Task task: user.getTasks()) {
+            if (task.getId().equals(id)) {
+                taskRepository.delete(task);
+                user.getTasks().remove(task);
+                return;
+            }
         }
-        taskRepository.delete(task);
+
+        throw new TaskNotFoundException();
     }
 
     @Override
     public List<TaskDto> getAllUserTasks() {
-        User user = userService.getUserFromSecurityContextHolder();
-        return taskMapper.entitiesToDtos(user.getTasks());
+        return userService.getUserFromSecurityContextHolder().getTasks().stream()
+                .map(task -> taskMapper.toDto(task))
+                .toList();
     }
 }

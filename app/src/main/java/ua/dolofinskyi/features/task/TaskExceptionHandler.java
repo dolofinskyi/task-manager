@@ -5,7 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ua.dolofinskyi.common.response.Response;
-import ua.dolofinskyi.features.task.exception.TaskAccessDeniedException;
 import ua.dolofinskyi.features.task.exception.TaskMissingDataException;
 import ua.dolofinskyi.features.task.exception.TaskNotFoundException;
 
@@ -21,13 +20,6 @@ public class TaskExceptionHandler {
     @ExceptionHandler(TaskMissingDataException.class)
     public ResponseEntity<Response> handleTaskMissingIdException() {
         HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
-        Response response = new Response(httpStatus.getReasonPhrase(), httpStatus.value());
-        return new ResponseEntity<>(response, httpStatus);
-    }
-
-    @ExceptionHandler(TaskAccessDeniedException.class)
-    public ResponseEntity<Response> handleTaskAccessDeniedException() {
-        HttpStatus httpStatus = HttpStatus.FORBIDDEN;
         Response response = new Response(httpStatus.getReasonPhrase(), httpStatus.value());
         return new ResponseEntity<>(response, httpStatus);
     }
