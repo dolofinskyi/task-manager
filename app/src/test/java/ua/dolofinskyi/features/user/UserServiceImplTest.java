@@ -10,7 +10,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
-import ua.dolofinskyi.features.task.Task;
 import ua.dolofinskyi.features.user.exception.UserNotFoundException;
 import ua.dolofinskyi.security.oauth2.CustomOAuth2User;
 
@@ -94,7 +93,6 @@ class UserServiceImplTest {
         UserDto userDto = new UserDto();
         userDto.setUsername("update username");
         userDto.setEmail("update email");
-        userDto.setTasks(List.of());
 
         when(userService.getUserFromSecurityContextHolder()).thenReturn(initUser);
         when(userMapper.toDto(any(User.class))).thenReturn(userDto);

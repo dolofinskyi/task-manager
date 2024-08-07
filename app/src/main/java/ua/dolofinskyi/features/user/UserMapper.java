@@ -1,14 +1,10 @@
 package ua.dolofinskyi.features.user;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ua.dolofinskyi.common.mapper.Mapper;
-import ua.dolofinskyi.features.task.TaskMapper;
 
 @Component
 public class UserMapper implements Mapper<User, UserDto> {
-    @Autowired
-    private TaskMapper taskMapper;
 
     @Override
     public User toEntity(UserDto userDto) {
@@ -23,7 +19,6 @@ public class UserMapper implements Mapper<User, UserDto> {
         UserDto userDto = new UserDto();
         userDto.setUsername(user.getUsername());
         userDto.setEmail(user.getEmail());
-        userDto.setTasks(taskMapper.entitiesToDtos(user.getTasks()));
         return userDto;
     }
 }

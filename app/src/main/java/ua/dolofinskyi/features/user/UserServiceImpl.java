@@ -58,14 +58,12 @@ public class UserServiceImpl implements UserService {
     public UserDto updateUser(UserDto userDto) {
         if (userDto == null ||
                 userDto.getEmail() == null ||
-                userDto.getUsername() == null ||
-                userDto.getTasks() == null) {
+                userDto.getUsername() == null) {
             throw new UserMissingCredentialsException();
         }
         User user = getUserFromSecurityContextHolder();
         user.setUsername(user.getUsername());
         user.setEmail(user.getEmail());
-        user.setTasks(user.getTasks());
         User savedUser = userRepository.save(user);
         return userMapper.toDto(savedUser);
     }
