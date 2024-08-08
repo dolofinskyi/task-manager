@@ -1,7 +1,19 @@
+:root {
+    --task-bg-color: #d8fee5;
+}
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: "Lato", sans-serif;
+}
+
+textarea {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    resize: none;
+    overflow: hidden;
 }
 
 html, body {
@@ -19,22 +31,45 @@ html, body {
 
 #task-container {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
     justify-content: flex-start;
     width: 100%;
-    gap: 25px;
+    gap: 15px;
 }
 
 .task {
-    width: fit-content;
+    width: calc(25% - 15px);
     height: fit-content;
+    background-color: var(--task-bg-color);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 15px;
+    gap: 10px;
 }
 
-.task div {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    gap: 25px;
+.task-title {
+    font-size: 1.15em;
+    font-weight: bold;
+}
+
+.task-title, .task-description {
+    padding: 5px;
+    width: 100%;
+}
+
+.task-label {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin: 15px;
+}
+
+.task.completed .task-title,
+.task.completed .task-description {
+    text-decoration: line-through;
 }
