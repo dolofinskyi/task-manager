@@ -1,8 +1,6 @@
 package ua.dolofinskyi.security.oauth2;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
 
@@ -12,8 +10,7 @@ import org.springframework.stereotype.Service;
 import ua.dolofinskyi.features.user.User;
 import ua.dolofinskyi.features.user.UserServiceImpl;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.ArrayList;
 
 
 @Service
@@ -31,11 +28,6 @@ public class CustomOAuth2UserService extends OidcUserService {
             user = userService.createUser(oidcUser);
         }
 
-        List<User.Role> roles = List.of(
-                User.Role.ROLE_USER
-        );
-
-        user.setRoles(roles);
-        return new CustomOAuth2User(user, user.getAuthorities(), oidcUser);
+        return new CustomOAuth2User(user, new ArrayList<>(), oidcUser);
     }
 }
