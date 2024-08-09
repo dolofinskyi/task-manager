@@ -2,15 +2,19 @@ spring:
   config:
     activate:
       on-profile: prod
-      datasource:
-        url: jdbc:postgresql://localhost:5432/taskmanager-db
-        driver-class-name: org.postgresql.Driver
-        username: postgres
-        password: admin
-      jpa:
-        hibernate:
-          ddl-auto: update
-        show-sql: true
-      flyway:
-        enabled: true
-        locations: classpath:db/migration
+  datasource:
+    url: jdbc:postgresql://localhost:5432/taskmanager-db
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: admin
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+  security:
+    jwt:
+      secret-key: "6ec035d91dc104db569a01a4d8c16fb13f125dc298992edfb8e66d3a837fe0c5"
+      expiration-time: 3600000

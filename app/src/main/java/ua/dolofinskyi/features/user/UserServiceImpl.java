@@ -1,10 +1,12 @@
 package ua.dolofinskyi.features.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ua.dolofinskyi.features.user.exception.UserAlreadyExistException;
 import ua.dolofinskyi.features.user.exception.UserMissingCredentialsException;
 import ua.dolofinskyi.features.user.exception.UserNotAuthenticatedException;
@@ -12,10 +14,9 @@ import ua.dolofinskyi.features.user.exception.UserNotFoundException;
 import ua.dolofinskyi.security.oauth2.CustomOAuth2User;
 
 import java.util.List;
-import java.util.Spliterator;
-import java.util.stream.StreamSupport;
 
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
@@ -32,10 +33,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(OAuth2User oAuth2User) {
-        if (oAuth2User == null) {
-            throw new UserNotFoundException();
-        }
-        if (oAuth2User.getAttributes() == null) {
+        if (oAuth2User == null || oAuth2User.getAttributes() == null) {
             throw new UserMissingCredentialsException();
         }
         for (String attr: List.of("sub", "email", "name")) {
@@ -86,11 +84,18 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserFromSecurityContextHolder() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null ||
-                !(authentication.getPrincipal() instanceof CustomOAuth2User oAuth2User)) {
+        if (authentication == null) {
             throw new UserNotAuthenticatedException();
         }
-        User user = oAuth2User.getUser();
+        Object principal = authentication.getPrincipal();
+        User user = null;
+
+        if (principal instanceof CustomOAuth2User oAuth2User) {
+            user = oAuth2User.getUser();
+        }
+        if (principal instanceof User subject) {
+            user = subject;
+        }
         if (user == null) {
             throw new UserNotFoundException();
         }

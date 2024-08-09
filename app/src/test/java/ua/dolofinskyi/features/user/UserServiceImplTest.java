@@ -13,6 +13,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import ua.dolofinskyi.features.user.exception.UserNotFoundException;
 import ua.dolofinskyi.security.oauth2.CustomOAuth2User;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -36,7 +37,6 @@ class UserServiceImplTest {
         initUser = new User();
         initUser.setUsername("username");
         initUser.setEmail("email");
-        initUser.setRoles(List.of(User.Role.ROLE_USER));
         initUser.setOauth2Sub("google_sub_0");
 
         CustomOAuth2User customOAuth2User = mock(CustomOAuth2User.class);
@@ -77,7 +77,7 @@ class UserServiceImplTest {
         when(userRepository.save(any(User.class))).thenReturn(initUser);
 
         OAuth2User oAuth2User = new DefaultOAuth2User(
-                List.of(new SimpleGrantedAuthority(User.Role.ROLE_USER.name())),
+                new ArrayList<>(),
                 Map.of("email", "email",
                         "sub", "google_sub_0",
                         "name", "username"),
