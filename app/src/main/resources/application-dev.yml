@@ -3,7 +3,7 @@ spring:
     activate:
       on-profile: dev
   datasource:
-    url: jdbc:h2:file:./app/src/main/resources/db/files/db
+    url: jdbc:h2:file:./app/src/main/resources/db/files/testdb
     driver-class-name: org.h2.Driver
     username: sa
     password: password
