@@ -1,0 +1,15 @@
+configuration:
+  registrationId: "google"
+  clientId: "539379928900-4pjbgga4o6tde251bcj31hsfb78atnls.apps.googleusercontent.com"
+  clientSecret: "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"
+  redirectUri: "{baseUrl}/login/oauth2/code/{registrationId}"
+  scopes:
+    - "openid"
+    - "profile"
+    - "email"
+  authorizationUri: "https://accounts.google.com/o/oauth2/v2/auth"
+  tokenUri: "https://www.googleapis.com/oauth2/v4/token"
+  userInfoUri: "https://www.googleapis.com/oauth2/v3/userinfo"
+  usernameAttributeName: "sub"
+  jwkSetUri: "https://www.googleapis.com/oauth2/v3/certs"
+  clientName: "Google"
