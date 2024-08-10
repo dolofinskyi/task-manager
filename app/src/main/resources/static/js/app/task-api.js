@@ -60,7 +60,7 @@ function deleteTask(id) {
     });
 };
 
-function taskElementInputsDblclick(event) {
+function taskElementInputsOnclick(event) {
     const element = event.target;
 
     if (!element.readOnly) {
@@ -152,7 +152,7 @@ function addElementTask(task) {
             <input type="hidden" class="task-id" name="task-id" value="${task.id}">
             <textarea readOnly="true" class="task-title" name="task-title">${task.title}</textarea>
             <textarea readOnly="true" class="task-description" name="task-title">${task.description}</textarea>
-            <button onclick="deleteTask(${task.id})">Delete</button>
+            <button class="delete-task-button" onclick="deleteTask(${task.id})">Delete</button>
         </div>
     `;
 
@@ -162,7 +162,7 @@ function addElementTask(task) {
     const taskElement = temp.firstChild.nextElementSibling;
 
     taskElement.querySelectorAll('.task-title, .task-description').forEach(element => {
-        element.addEventListener('dblclick', taskElementInputsDblclick);
+        element.addEventListener('click', taskElementInputsOnclick);
         element.addEventListener('input', () => autoResizeTextarea(element));
         setTimeout(() => autoResizeTextarea(element), 0);
     });

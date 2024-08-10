@@ -6,27 +6,21 @@
     <link th:href="@{/css/app/main.css}" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=Lato:ital,wght@0,400;0,700;1,400;1,700&family=Roboto:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="user-data">
-        <div class="username-container">
-            <p>username: </p>
-            <input type="text" name="username" id="username" class="username editable" th:value="${user.username}">
+    <header>
+        <div class="user-data">
+            <p>username: <span th:text="${user.username}"></span></p>
+            <p>email: <span th:text="${user.email}"></span></p>
         </div>
-        <div class="email-container">
-            <p>email: </p>
-            <input type="text" name="email" id="email" class="email editable" th:value="${user.email}">
-        </div>
-    </div>
+        <button id="add-task" class="add-task-button">add task</button>
+    </header>
 
     <div id="task-list">
-        <div id="task-container">
-
-        </div>
+        <div id="task-container"></div>
     </div>
 
-    <button id="add-task">add task</button>
     <script th:src="@{/js/app/task-api.js}"></script>
 </body>
 </html>

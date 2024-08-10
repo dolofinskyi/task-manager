@@ -18,8 +18,11 @@ public class TaskServiceImpl implements TaskService {
     private TaskRepository taskRepository;
     @Autowired
     private UserServiceImpl userService;
-    @Autowired
-    private UserRepository userRepository;
+
+    @Override
+    public Task save(Task task) {
+        return taskRepository.save(task);
+    }
 
     @Override
     public TaskDto getTaskById(Long id) {
@@ -88,6 +91,7 @@ public class TaskServiceImpl implements TaskService {
             if (task.getId().equals(id)) {
                 taskRepository.delete(task);
                 user.getTasks().remove(task);
+                userService.save(user);
                 return;
             }
         }
