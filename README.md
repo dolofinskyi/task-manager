@@ -23,7 +23,7 @@ Task Manager is a simple web application that allows users to add and edit notes
 
 > [!IMPORTANT]
 > This profile named ```application-dev.yml``` and connected to H2 database, which saves the ```.mv.db``` file to following path: ```./db/files/<dbname>.mv.db```.  
-> You should set your ```username``` and  ```password``` variables accordingly to your H2 database settings.
+> You should set your ```username``` and  ```password``` variables.
 
 ## Prod profile
 
