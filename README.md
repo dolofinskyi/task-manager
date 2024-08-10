@@ -16,7 +16,8 @@ Task Manager is a simple web application that allows users to add and edit notes
 
 2. **Launch**
 
-   You have 2 choises: dev or prod prifiles.
+   You have 2 choises: ```dev``` or ```prod``` profiles.
+   You must choose your profile by setting ```spring.profiles.active``` variable ```dev``` or ```prod``` values respectively.
 
    ## Dev profile
    This profile named ```application-dev.yml``` and connected to H2 database, which saves the ```.mv.db``` file to following path: ```./db/files/<dbname>.mv.db```. Also you must fill your ```username``` and  ```password``` variables.
@@ -24,4 +25,5 @@ Task Manager is a simple web application that allows users to add and edit notes
    ## Prod profile
    This profile named ```application-prod.yml``` and connected to PostgreSQL database. You must fill your ```database-url```, ```username``` and  ```password``` variables.
 
- Each profile have default settings for Jwt token. You can configure ```secret-key``` and ```expiration-time``` for each of them.  ```secret-key``` must be 256 bits HEX string. 
+   ##
+   Each profile have default settings for Jwt token. You can configure ```secret-key``` and ```expiration-time``` for each of them.  ```secret-key``` must be 256 bits HEX string. 
